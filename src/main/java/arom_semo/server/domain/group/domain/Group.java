@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity @Getter
+@Table(name = "groups")
 @NoArgsConstructor(access = PROTECTED)
 public class Group extends BaseEntity {
 
