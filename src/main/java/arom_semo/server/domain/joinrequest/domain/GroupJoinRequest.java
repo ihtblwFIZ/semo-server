@@ -1,4 +1,4 @@
-package arom_semo.server.domain.joinrequest;
+package arom_semo.server.domain.joinrequest.domain;
 
 import arom_semo.server.domain.group.domain.Group;
 import arom_semo.server.domain.member.domain.Member;
