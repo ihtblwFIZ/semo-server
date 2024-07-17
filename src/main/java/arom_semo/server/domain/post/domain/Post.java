@@ -35,4 +35,11 @@ public class Post extends BaseEntity {
 
     //이미지 필요한 경우 따로 추가
 
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

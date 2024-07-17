@@ -1,13 +1,13 @@
 package arom_semo.server.domain.post.service;
 
 import arom_semo.server.domain.group.domain.Group;
-import arom_semo.server.domain.group.domain.GroupCategory;
 import arom_semo.server.domain.group.repository.GroupRepository;
 import arom_semo.server.domain.member.domain.Member;
 import arom_semo.server.domain.member.repository.MemberRepository;
 import arom_semo.server.domain.post.domain.Post;
 import arom_semo.server.domain.post.dto.PostCreateRequestDto;
 import arom_semo.server.domain.post.dto.PostResponseDto;
+import arom_semo.server.domain.post.dto.PostUpdateRequestDto;
 import arom_semo.server.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,5 +55,34 @@ public class PostManagementService {
                         post.getGroup(),
                         post.getMember()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void modifyPost(String userName, PostUpdateRequestDto dto) {
+        Post post = postRepository.findById(dto.postId()).orElseThrow();
+        Member member = memberRepository.findByUsername(userName).orElseThrow();
+
+        if (!post.getMember().equals(member)) {
+            throw new IllegalArgumentException("Error");
+        }
+
+        if (dto.title() != null) {
+            post.updateTitle(dto.title());
+        }
+        if (dto.content() != null) {
+            post.updateContent(dto.content());
+        }
+    }
+
+    @Transactional
+    public void deletePost(String userName, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow();
+        Member member = memberRepository.findByUsername(userName).orElseThrow();
+
+        if (!post.getMember().equals(member)) {
+            throw new IllegalArgumentException("Error");
+        }
+
+        postRepository.delete(post);
     }
 }
