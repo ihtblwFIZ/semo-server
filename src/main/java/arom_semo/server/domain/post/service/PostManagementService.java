@@ -1,15 +1,20 @@
 package arom_semo.server.domain.post.service;
 
 import arom_semo.server.domain.group.domain.Group;
+import arom_semo.server.domain.group.domain.GroupCategory;
 import arom_semo.server.domain.group.repository.GroupRepository;
 import arom_semo.server.domain.member.domain.Member;
 import arom_semo.server.domain.member.repository.MemberRepository;
 import arom_semo.server.domain.post.domain.Post;
 import arom_semo.server.domain.post.dto.PostCreateRequestDto;
+import arom_semo.server.domain.post.dto.PostResponseDto;
 import arom_semo.server.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +36,24 @@ public class PostManagementService {
                 .build();
 
         return postRepository.save(post).getPostId().toString();
+    }
+
+    @Transactional(readOnly = true)
+    public PostResponseDto getPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow();
+        return PostResponseDto.of(
+                post.getPostId(), post.getTitle(), post.getContent(), post.getGroup(), post.getMember());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> getAllPosts() {
+        return postRepository.findAll().stream()
+                .map(post -> PostResponseDto.of(
+                        post.getPostId(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getGroup(),
+                        post.getMember()))
+                .collect(Collectors.toList());
     }
 }
