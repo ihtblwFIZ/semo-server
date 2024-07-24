@@ -7,7 +7,7 @@ import arom_semo.server.domain.member.repository.MemberRepository;
 import arom_semo.server.domain.post.domain.Post;
 import arom_semo.server.domain.post.dto.PostCreateRequestDto;
 import arom_semo.server.domain.post.dto.PostResponseDto;
-import arom_semo.server.domain.post.dto.PostUpdateRequestDto;
+import arom_semo.server.domain.post.dto.PostModifyRequestDto;
 import arom_semo.server.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,14 +39,14 @@ public class PostManagementService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponseDto getPost(Long postId) {
+    public PostResponseDto findPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow();
         return PostResponseDto.of(
                 post.getPostId(), post.getTitle(), post.getContent(), post.getGroup(), post.getMember());
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getAllPosts() {
+    public List<PostResponseDto> findAllPosts() {
         return postRepository.findAll().stream()
                 .map(post -> PostResponseDto.of(
                         post.getPostId(),
@@ -58,7 +58,7 @@ public class PostManagementService {
     }
 
     @Transactional
-    public void modifyPost(String userName, PostUpdateRequestDto dto) {
+    public void modifyPost(String userName, PostModifyRequestDto dto) {
         Post post = postRepository.findById(dto.postId()).orElseThrow();
         Member member = memberRepository.findByUsername(userName).orElseThrow();
 
