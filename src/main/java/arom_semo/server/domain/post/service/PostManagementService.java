@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PostManagementService {
     private final MemberRepository memberRepository;
     private final GroupRepository groupRepository;
