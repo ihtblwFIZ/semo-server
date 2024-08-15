@@ -1,4 +1,6 @@
 package arom_semo.server.domain.post.dto;
 
-public record PostCreateRequestDto (String title, String content) {
+import java.util.List;
+
+public record PostCreateRequestDto (String title, String content, List<String> images) {
 }

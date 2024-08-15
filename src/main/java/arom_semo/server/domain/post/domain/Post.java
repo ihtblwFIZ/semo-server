@@ -47,4 +47,9 @@ public class Post extends BaseEntity {
     public void updateContent(String content) {
         this.content = content;
     }
+
+    public void addImage(Image image) {
+        images.add(image);
+        image.updatePost(this);
+    }
 }

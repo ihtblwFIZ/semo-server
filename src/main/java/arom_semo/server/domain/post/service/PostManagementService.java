@@ -2,6 +2,8 @@ package arom_semo.server.domain.post.service;
 
 import arom_semo.server.domain.group.domain.Group;
 import arom_semo.server.domain.group.repository.GroupRepository;
+import arom_semo.server.domain.image.domain.Image;
+import arom_semo.server.domain.image.repository.ImageRepository;
 import arom_semo.server.domain.member.domain.Member;
 import arom_semo.server.domain.member.repository.MemberRepository;
 import arom_semo.server.domain.post.domain.Post;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class PostManagementService {
     private final MemberRepository memberRepository;
     private final GroupRepository groupRepository;
     private final PostRepository postRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional
     public String createPost(String userName, String groupName, PostCreateRequestDto dto) {
@@ -36,26 +38,48 @@ public class PostManagementService {
                 .member(member)
                 .build();
 
-        return postRepository.save(post).getPostId().toString();
+        postRepository.save(post);
+
+        dto.images().forEach(images -> {
+            Image image = new Image(images, post);
+            post.addImage(image);
+            imageRepository.save(image);
+        });
+
+        return post.getPostId().toString();
     }
 
     @Transactional(readOnly = true)
     public PostResponseDto findPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow();
+        List<String> images = post.getImages().stream()
+                .map(Image::getImageUrl).toList();
+
         return PostResponseDto.of(
-                post.getPostId(), post.getTitle(), post.getContent(), post.getGroup(), post.getMember());
+                post.getPostId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getGroup(),
+                post.getMember(),
+                images);
     }
 
     @Transactional(readOnly = true)
     public List<PostResponseDto> findAllPosts() {
         return postRepository.findAll().stream()
-                .map(post -> PostResponseDto.of(
-                        post.getPostId(),
-                        post.getTitle(),
-                        post.getContent(),
-                        post.getGroup(),
-                        post.getMember()))
-                .collect(Collectors.toList());
+                .map(post -> {
+                    List<String> images = post.getImages().stream()
+                            .map(Image::getImageUrl).toList();
+
+                    return PostResponseDto.of(
+                            post.getPostId(),
+                            post.getTitle(),
+                            post.getContent(),
+                            post.getGroup(),
+                            post.getMember(),
+                            images);
+                })
+                .toList();
     }
 
     @Transactional
@@ -72,6 +96,15 @@ public class PostManagementService {
         }
         if (dto.content() != null) {
             post.updateContent(dto.content());
+        }
+
+        if (dto.images() != null && !dto.images().isEmpty()) {
+            post.getImages().clear();
+            dto.images().forEach(imageUrl -> {
+                Image image = new Image(imageUrl, post);
+                post.addImage(image);
+                imageRepository.save(image);
+            });
         }
     }
 
