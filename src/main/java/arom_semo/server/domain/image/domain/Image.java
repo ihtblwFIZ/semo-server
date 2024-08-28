@@ -7,8 +7,9 @@ import lombok.*;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity @Getter
+@Entity @Getter @Builder
 @NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PROTECTED)
 public class Image extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +21,6 @@ public class Image extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post-id", nullable = false)
     private Post post;
-
-    public Image(String imageUrl, Post post) {
-        this.imageUrl = imageUrl;
-        this.post = post;
-    }
 
     public void updatePost(Post post) {
         this.post = post;

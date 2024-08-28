@@ -3,7 +3,7 @@ package arom_semo.server.domain.post.service;
 import arom_semo.server.domain.group.domain.Group;
 import arom_semo.server.domain.group.repository.GroupRepository;
 import arom_semo.server.domain.image.domain.Image;
-import arom_semo.server.domain.image.repository.ImageRepository;
+import arom_semo.server.domain.image.service.ImageService;
 import arom_semo.server.domain.member.domain.Member;
 import arom_semo.server.domain.member.repository.MemberRepository;
 import arom_semo.server.domain.post.domain.Post;
@@ -24,7 +24,8 @@ public class PostManagementService {
     private final MemberRepository memberRepository;
     private final GroupRepository groupRepository;
     private final PostRepository postRepository;
-    private final ImageRepository imageRepository;
+
+    private final ImageService imageService;
 
     @Transactional
     public String createPost(String userName, String groupName, PostCreateRequestDto dto) {
@@ -40,10 +41,9 @@ public class PostManagementService {
 
         postRepository.save(post);
 
-        dto.images().forEach(images -> {
-            Image image = new Image(images, post);
+        dto.images().forEach(imageUrl -> {
+            Image image = imageService.addImage(imageUrl, post);
             post.addImage(image);
-            imageRepository.save(image);
         });
 
         return post.getPostId().toString();
@@ -99,11 +99,11 @@ public class PostManagementService {
         }
 
         if (dto.images() != null && !dto.images().isEmpty()) {
+            post.getImages().forEach(imageService::deleteImage);
             post.getImages().clear();
             dto.images().forEach(imageUrl -> {
-                Image image = new Image(imageUrl, post);
+                Image image = imageService.addImage(imageUrl, post);
                 post.addImage(image);
-                imageRepository.save(image);
             });
         }
     }
