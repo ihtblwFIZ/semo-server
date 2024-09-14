@@ -1,7 +1,7 @@
 package arom_semo.server.domain.post.service;
 
 import arom_semo.server.domain.group.domain.Group;
-import arom_semo.server.domain.group.repository.GroupRepository;
+import arom_semo.server.domain.group.service.GroupService;
 import arom_semo.server.domain.member.domain.Member;
 import arom_semo.server.domain.member.repository.MemberRepository;
 import arom_semo.server.domain.post.domain.Post;
@@ -21,13 +21,14 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class PostManagementService {
     private final MemberRepository memberRepository;
-    private final GroupRepository groupRepository;
     private final PostRepository postRepository;
 
+    private final GroupService groupService;
+
     @Transactional
-    public String createPost(String userName, String groupName, PostCreateRequestDto dto) {
+    public String createPost(String userName, PostCreateRequestDto dto) {
         Member member = memberRepository.findByUsername(userName).orElseThrow();
-        Group group = groupRepository.findByName(groupName).orElseThrow();
+        Group group = groupService.createGroup(dto.group(), dto.group().groupLocation());
 
         Post post = Post.builder()
                 .title(dto.title())

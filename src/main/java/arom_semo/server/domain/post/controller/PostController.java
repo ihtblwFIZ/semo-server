@@ -19,11 +19,10 @@ public class PostController {
 
     @PostMapping("posts")
     public ResponseEntity<String> createPost(@RequestParam String userName,
-                                                      @RequestParam String groupName,
-                                                      @RequestBody PostCreateRequestDto dto) {
+                                             @RequestBody PostCreateRequestDto dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(postService.createPost(userName, groupName, dto));
+                .body(postService.createPost(userName, dto));
     }
 
     @GetMapping("posts/{postId}")

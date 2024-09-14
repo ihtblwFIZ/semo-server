@@ -3,20 +3,20 @@ package arom_semo.server.domain.post.service;
 import arom_semo.server.domain.post.dto.PostCreateRequestDto;
 import arom_semo.server.domain.post.dto.PostModifyRequestDto;
 import arom_semo.server.domain.post.dto.PostResponseDto;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PostService {
     private PostManagementService postManagementService;
 
     @Transactional
-    public String createPost(String userName, String groupName, PostCreateRequestDto dto) {
-        return postManagementService.createPost(userName, groupName, dto);
+    public String createPost(String userName, PostCreateRequestDto dto) {
+        return postManagementService.createPost(userName, dto);
     }
 
     @Transactional(readOnly = true)

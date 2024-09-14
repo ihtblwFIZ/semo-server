@@ -2,13 +2,16 @@ package arom_semo.server.domain.group.domain;
 
 import arom_semo.server.global.model.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity @Getter
+@Entity @Getter @Builder
 @Table(name = "groups")
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class Group extends BaseEntity {
 

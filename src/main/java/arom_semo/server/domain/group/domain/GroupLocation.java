@@ -1,13 +1,16 @@
 package arom_semo.server.domain.group.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity @Getter
+@Entity @Getter @Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class GroupLocation {
     @Id
