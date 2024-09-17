@@ -15,8 +15,8 @@ public class PostService {
     private PostManagementService postManagementService;
 
     @Transactional
-    public String createPost(String userName, PostCreateRequestDto dto) {
-        return postManagementService.createPost(userName, dto);
+    public String createPost(Long userId, PostCreateRequestDto dto) {
+        return postManagementService.createPost(userId, dto);
     }
 
     @Transactional(readOnly = true)
@@ -30,12 +30,12 @@ public class PostService {
     }
 
     @Transactional
-    public void modifyPost(String userName, PostModifyRequestDto dto) {
-        postManagementService.modifyPost(userName, dto);
+    public void modifyPost(Long userId, PostModifyRequestDto dto) {
+        postManagementService.modifyPost(userId, dto);
     }
 
     @Transactional
-    public void deletePost(String userName, Long postId) {
-        postManagementService.deletePost(userName, postId);
+    public void deletePost(Long userId, Long postId) {
+        postManagementService.deletePost(userId, postId);
     }
 }

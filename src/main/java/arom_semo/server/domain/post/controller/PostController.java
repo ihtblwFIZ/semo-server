@@ -18,11 +18,11 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("posts")
-    public ResponseEntity<String> createPost(@RequestParam String userName,
+    public ResponseEntity<String> createPost(@RequestParam Long userId,
                                              @RequestBody PostCreateRequestDto dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(postService.createPost(userName, dto));
+                .body(postService.createPost(userId, dto));
     }
 
     @GetMapping("posts/{postId}")
@@ -36,16 +36,16 @@ public class PostController {
     }
 
     @PatchMapping("posts/{postId}")
-    public ResponseEntity<Void> modifyPost(@RequestParam String userName,
+    public ResponseEntity<Void> modifyPost(@RequestParam Long userId,
                                            @RequestBody PostModifyRequestDto dto) {
-        postService.modifyPost(userName, dto);
+        postService.modifyPost(userId, dto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("posts/{postId}")
-    public ResponseEntity<Void> deletePost(@RequestParam String userName,
+    public ResponseEntity<Void> deletePost(@RequestParam Long userId,
                                            @PathVariable Long postId) {
-        postService.deletePost(userName, postId);
+        postService.deletePost(userId, postId);
         return ResponseEntity.ok().build();
     }
 }

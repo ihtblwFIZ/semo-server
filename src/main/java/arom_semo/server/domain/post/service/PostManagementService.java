@@ -26,8 +26,8 @@ public class PostManagementService {
     private final GroupService groupService;
 
     @Transactional
-    public String createPost(String userName, PostCreateRequestDto dto) {
-        Member member = memberRepository.findByUsername(userName).orElseThrow();
+    public String createPost(Long userId, PostCreateRequestDto dto) {
+        Member member = memberRepository.findById(userId).orElseThrow();
         Group group = groupService.createGroup(dto.group(), dto.group().groupLocation());
 
         Post post = Post.builder()
@@ -60,9 +60,9 @@ public class PostManagementService {
     }
 
     @Transactional
-    public void modifyPost(String userName, PostModifyRequestDto dto) {
+    public void modifyPost(Long userId, PostModifyRequestDto dto) {
         Post post = postRepository.findById(dto.postId()).orElseThrow();
-        Member member = memberRepository.findByUsername(userName).orElseThrow();
+        Member member = memberRepository.findById(userId).orElseThrow();
 
         if (!post.getMember().equals(member)) {
             throw new IllegalArgumentException("Error");
@@ -77,9 +77,9 @@ public class PostManagementService {
     }
 
     @Transactional
-    public void deletePost(String userName, Long postId) {
+    public void deletePost(Long userId, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow();
-        Member member = memberRepository.findByUsername(userName).orElseThrow();
+        Member member = memberRepository.findById(userId).orElseThrow();
 
         if (!post.getMember().equals(member)) {
             throw new IllegalArgumentException("Error");
