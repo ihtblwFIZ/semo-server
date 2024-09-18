@@ -54,4 +54,17 @@ public class JoinRequestService {
         Group group = joinRequest.getGroup();
         group.increaseCurrentParticipants();
     }
+
+    @Transactional
+    public void rejectJoinRequest(Long joinRequestId) {
+        GroupJoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 가입 요청"));
+
+        if (joinRequest.getStatus() != GroupJoinRequest.Status.pending) {
+            throw  new IllegalStateException("이미 처리된 가입 요청");
+        }
+
+        joinRequest.updateStatus(GroupJoinRequest.Status.rejected);
+        joinRequestRepository.save(joinRequest);
+    }
 }

@@ -22,4 +22,10 @@ public class JoinRequestController {
         joinRequestService.approveJoinRequest(joinRequestId);
         return ResponseEntity.ok("승인 완료");
     }
+
+    @PostMapping("/join-requests/{joinRequestId}/reject")
+    public ResponseEntity<String> rejectJoinRequest(@PathVariable Long joinRequestId) {
+        joinRequestService.rejectJoinRequest(joinRequestId);
+        return ResponseEntity.ok("거절 완료");
+    }
 }
