@@ -40,4 +40,7 @@ public class GroupJoinRequest extends BaseEntity {
         pending, approved, rejected
     }
 
+    public void updateStatus(Status status) {
+        this.status = status;
+    }
 }

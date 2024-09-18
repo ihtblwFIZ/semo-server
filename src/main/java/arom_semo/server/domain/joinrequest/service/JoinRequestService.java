@@ -18,6 +18,7 @@ public class JoinRequestService {
     private final MemberRepository memberRepository;
     private final JoinRequestRepository joinRequestRepository;
 
+    @Transactional
     public void applyToJoinGroup(Long memberId, Long groupId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 사용자"));
@@ -38,5 +39,19 @@ public class JoinRequestService {
         joinRequestRepository.save(groupJoinRequest);
     }
 
-    // 마저 작성 혹은 apply 수정 후 커밋
+    @Transactional
+    public void approveJoinRequest(Long joinRequestId) {
+        GroupJoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 가입 요청"));
+
+        if (joinRequest.getStatus() != GroupJoinRequest.Status.pending) {
+            throw new IllegalStateException("이미 처리된 가입 요청");
+        }
+
+        joinRequest.updateStatus(GroupJoinRequest.Status.approved);
+        joinRequestRepository.save(joinRequest);
+
+        Group group = joinRequest.getGroup();
+        group.increaseCurrentParticipants();
+    }
 }

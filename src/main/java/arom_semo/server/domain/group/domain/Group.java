@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity @Getter @Builder
-@Table(name = "groups")
+@Table(name = "group")
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 public class Group extends BaseEntity {
@@ -37,4 +37,8 @@ public class Group extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "group_location_id", nullable = false)
     private GroupLocation groupLocation;
+
+    public void increaseCurrentParticipants() {
+        currentParticipants++;
+    }
 }
