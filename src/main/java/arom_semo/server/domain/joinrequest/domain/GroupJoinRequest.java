@@ -4,18 +4,17 @@ import arom_semo.server.domain.group.domain.Group;
 import arom_semo.server.domain.member.domain.Member;
 import arom_semo.server.global.model.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity @Getter
-@Table(name = "group_join_request")
+@Entity @Getter @Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
+@Table(name = "group_join_request")
 public class GroupJoinRequest extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
