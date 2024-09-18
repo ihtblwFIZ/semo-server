@@ -3,12 +3,16 @@ package arom_semo.server.domain.joinrequest.service;
 import arom_semo.server.domain.group.domain.Group;
 import arom_semo.server.domain.group.repository.GroupRepository;
 import arom_semo.server.domain.joinrequest.domain.GroupJoinRequest;
+import arom_semo.server.domain.joinrequest.dto.GroupJoinRequestDto;
 import arom_semo.server.domain.joinrequest.repository.JoinRequestRepository;
 import arom_semo.server.domain.member.domain.Member;
 import arom_semo.server.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +27,7 @@ public class JoinRequestService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 사용자"));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹"));
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 모임"));
 
         if (joinRequestRepository.existsByGroupAndMemberAndStatus(group, member, GroupJoinRequest.Status.pending)
             || joinRequestRepository.existsByGroupAndMemberAndStatus(group, member, GroupJoinRequest.Status.approved)) {
@@ -66,5 +70,21 @@ public class JoinRequestService {
 
         joinRequest.updateStatus(GroupJoinRequest.Status.rejected);
         joinRequestRepository.save(joinRequest);
+    }
+
+    public List<GroupJoinRequestDto> getPendingJoinRequests(Long groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 모임"));
+
+        List<GroupJoinRequest> pendingRequests =
+                joinRequestRepository.findAllByGroupAndStatus(group, GroupJoinRequest.Status.pending);
+
+        return pendingRequests.stream()
+                .map(request -> new GroupJoinRequestDto(
+                        request.getGroupJoinRequestId(),
+                        request.getGroup().getName(),
+                        request.getMember().getUsername(),
+                        request.getStatus().name()))
+                .collect(Collectors.toList());
     }
 }

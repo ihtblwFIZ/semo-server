@@ -1,9 +1,12 @@
 package arom_semo.server.domain.joinrequest.controller;
 
+import arom_semo.server.domain.joinrequest.dto.GroupJoinRequestDto;
 import arom_semo.server.domain.joinrequest.service.JoinRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +30,10 @@ public class JoinRequestController {
     public ResponseEntity<String> rejectJoinRequest(@PathVariable Long joinRequestId) {
         joinRequestService.rejectJoinRequest(joinRequestId);
         return ResponseEntity.ok("거절 완료");
+    }
+
+    @GetMapping("/{groupId}/join-requests")
+    public ResponseEntity<List<GroupJoinRequestDto>> getPendingJoinRequests(@PathVariable Long groupId) {
+        return ResponseEntity.ok(joinRequestService.getPendingJoinRequests(groupId));
     }
 }
