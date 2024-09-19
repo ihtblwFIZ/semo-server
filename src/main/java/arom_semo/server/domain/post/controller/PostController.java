@@ -17,35 +17,35 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping("posts")
-    public ResponseEntity<String> createPost(@RequestParam String userName,
-                                                      @RequestParam String groupName,
+    @PostMapping("")
+    public ResponseEntity<String> createPost(@RequestParam(value = "userName") String userName,
+                                                      @RequestParam(value = "groupName") String groupName,
                                                       @RequestBody PostCreateRequestDto dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(postService.createPost(userName, groupName, dto));
     }
 
-    @GetMapping("posts/{postId}")
-    public ResponseEntity<PostResponseDto> fetchPost(@PathVariable Long postId) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostResponseDto> fetchPost(@PathVariable(value = "postId") Long postId) {
         return ResponseEntity.ok(postService.getPost(postId));
     }
 
-    @GetMapping("posts")
+    @GetMapping("")
     public ResponseEntity<List<PostResponseDto>> fetchAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 
-    @PatchMapping("posts/{postId}")
-    public ResponseEntity<Void> modifyPost(@RequestParam String userName,
+    @PatchMapping("/{postId}")
+    public ResponseEntity<Void> modifyPost(@RequestParam(value = "userName") String userName,
                                            @RequestBody PostModifyRequestDto dto) {
         postService.modifyPost(userName, dto);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("posts/{postId}")
-    public ResponseEntity<Void> deletePost(@RequestParam String userName,
-                                           @PathVariable Long postId) {
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(@RequestParam(value = "userName") String userName,
+                                           @PathVariable(value = "postId") Long postId) {
         postService.deletePost(userName, postId);
         return ResponseEntity.ok().build();
     }
