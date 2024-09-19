@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/groups")
+@RequestMapping("/api/v1/group")
 public class JoinRequestController {
     private final JoinRequestService joinRequestService;
 

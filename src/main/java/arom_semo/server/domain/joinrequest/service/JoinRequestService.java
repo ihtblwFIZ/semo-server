@@ -82,7 +82,7 @@ public class JoinRequestService {
         return pendingRequests.stream()
                 .map(request -> new GroupJoinRequestDto(
                         request.getGroupJoinRequestId(),
-                        request.getGroup().getName(),
+                        request.getGroup().getGroupName(),
                         request.getMember().getUsername(),
                         request.getStatus().name()))
                 .collect(Collectors.toList());

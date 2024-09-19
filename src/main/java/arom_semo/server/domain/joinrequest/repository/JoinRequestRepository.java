@@ -10,4 +10,5 @@ import java.util.List;
 public interface JoinRequestRepository extends JpaRepository<GroupJoinRequest, Long> {
     boolean existsByGroupAndMemberAndStatus(Group group, Member member, GroupJoinRequest.Status status);
     List<GroupJoinRequest> findAllByGroupAndStatus(Group group, GroupJoinRequest.Status status);
+    List<GroupJoinRequest> findAllByMemberAndStatus(Member member, GroupJoinRequest.Status status);
 }

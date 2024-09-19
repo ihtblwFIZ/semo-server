@@ -20,7 +20,7 @@ public class Group extends BaseEntity {
     private Long groupId;
 
     @Column(unique = true, nullable = false, length = 32)
-    private String name;
+    private String groupName;
 
     @Column(nullable = false)
     private int maxParticipants = 1;
